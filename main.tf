@@ -11,9 +11,9 @@ variable "all_instances" {
 
 resource "google_compute_instance" "first-instance" {
   count        = 8
-  name         = "instance-${count.index}"
-  machine_type = "f1-micro"
-  zone         = "us-east1-b"
+  name         = "puppet-${count.index}"
+  machine_type = "n1-standard-4"
+  zone         = "us-west2-a"
 
   tags = ["terraform"]
 
@@ -25,6 +25,7 @@ resource "google_compute_instance" "first-instance" {
 
   network_interface {
     network = "default"
+
     access_config {
       // Ephemeral IP
     }
@@ -32,7 +33,7 @@ resource "google_compute_instance" "first-instance" {
 
   metadata {
     Name     = "Terraform Demo"
-    ssh-keys = "${var.ssh_user}:${file("${var.public_key_path}")}" 
+    ssh-keys = "${var.ssh_user}:${file("${var.public_key_path}")}"
   }
 
   metadata_startup_script = "echo hi > /test.txt"
