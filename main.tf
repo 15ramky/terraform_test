@@ -39,9 +39,15 @@ resource "google_compute_instance" "first-instance" {
   metadata {
     Name     = "Terraform Demo"
     ssh-keys = "${var.ssh_user}:${file("${var.public_key_path}")}"
-  }
 
-  metadata_startup_script = "/bin/bash puppet-agent-startup-file.sh > ~/result.txt"
+    startup-script = <<SCRIPT
+    sudo yum update -y
+    sudo yum install puppet-agent -y
+    sudo systemctl start puppet
+    sudo systemctl enable puppet
+    sudo puppet agent --test -v
+    SCRIPT
+  }
 }
 
 resource "google_compute_instance" "master-instance" {
@@ -71,7 +77,15 @@ resource "google_compute_instance" "master-instance" {
   metadata {
     Name     = "puppet master"
     ssh-keys = "${var.ssh_user}:${file("${var.public_key_path}")}"
-  }
 
-  metadata_startup_script = "/bin/bash puppet-master-startup-file.sh> ~/result.txt"
+    //startup-script = "./puppet-agent-startup-file.sh"
+    startup-script = <<SCRIPT
+    sudo yum update -y
+    sudo yum install puppetserver -y
+    # start and enable the puppet server service
+    sudo systemctl start puppetserver
+    sudo systemctl enable puppetserver
+    sudo puppet agent --test -v
+    SCRIPT
+  }
 }
