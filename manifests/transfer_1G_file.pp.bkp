@@ -1,0 +1,6 @@
+#
+# STEP_1: generate 1G dummy file with fallocate on local machine
+# STEP_2: send it to all agents
+#
+
+
