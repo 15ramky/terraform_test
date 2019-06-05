@@ -6,7 +6,7 @@ provider "google" {
 
 variable "all_instances" {
   type    = "list"
-  default = ["ubuntu-os-cloud/ubuntu-1604-lts", "ubuntu-os-cloud/ubuntu-1604-lts", "ubuntu-os-cloud/ubuntu-1604-lts", "ubuntu-os-cloud/ubuntu-1604-lts", "ubuntu-os-cloud/ubuntu-1604-lts"]
+  default = ["windows-cloud/windows-2012-r2", "windows-sql-cloud/sql-ent-2014-win-2012-r2", "windows-sql-cloud/sql-ent-2016-win-2016", "windows-sql-cloud/sql-std-2016-win-2016", "windows-sql-cloud/sql-exp-2017-win-2016"]
 }
 
 variable "master-puppet" {
@@ -17,7 +17,7 @@ variable "master-puppet" {
 resource "google_compute_instance" "first-instance" {
   count        = 5
   name         = "puppet-agent-${count.index}"
-  machine_type = "f1-micro"
+  machine_type = "n1-standard-4"
   zone         = "us-west2-a"
 
   tags = ["terraform"]
